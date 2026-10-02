@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinils Store</title>
+    <!-- Google Fonts and Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #01875f;
+            --text-main: #202124;
+            --text-secondary: #5f6368;
+            --bg-color: #ffffff;
+            --search-bg: #f1f3f4;
+            --border-color: #e8eaed;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3);
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 100;
+        }
+
+        .menu-icon, .profile-icon {
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .profile-icon {
+            color: var(--primary-color);
+            font-size: 32px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 500;
+            margin-left: 16px;
+            color: var(--text-secondary);
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            color: var(--primary-color);
+        }
+
+        .search-bar {
+            background: var(--search-bg);
+            border-radius: 8px;
+            padding: 10px 16px;
+            width: 100%;
+            max-width: 720px;
+            display: flex;
+            align-items: center;
+            margin: 0 24px;
+            transition: background 0.2s;
+        }
+
+        .search-bar:focus-within {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .nav-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 24px;
+            overflow-x: auto;
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 16px 24px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: color 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--primary-color);
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        /* App Sections */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section {
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .section-title i {
+            color: var(--text-secondary);
+        }
+
+        /* App Grid */
+        .app-grid {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            padding-bottom: 16px;
+            scroll-snap-type: x mandatory;
+        }
+
+        .app-grid::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .app-grid::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 10px;
+        }
+
+        .app-card {
+            width: 140px;
+            flex-shrink: 0;
+            cursor: pointer;
+            scroll-snap-align: start;
+            transition: transform 0.2s;
+        }
+
+        .app-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .app-icon {
+            width: 140px;
+            height: 140px;
+            border-radius: 22px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 64px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-title {
+            font-size: 14px;
+            font-weight: 400;
+            margin: 12px 0 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-main);
+        }
+
+        .app-size {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .app-rating {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .star {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        /* Canvas Banner Element */
+        .featured-banner {
+            width: 100%;
+            height: 250px;
+            background: #111;
+            margin-bottom: 20px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        #promoCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        .banner-text {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+
+        .banner-text h2 {
+            margin: 0 0 8px 0;
+            font-size: 28px;
+        }
+
+        .banner-text p {
+            margin: 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .search-bar { display: none; }
+            .tab { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <i class="material-icons menu-icon">menu</i>
+        <div class="logo">
+            <i class="material-icons">shop</i>
+            Vinils Store
+        </div>
+        <div class="search-bar">
+            <i class="material-icons" style="color: #5f6368; margin-right: 12px;">search</i>
+            <input type="text" placeholder="Search for apps & games">
+            <i class="material-icons" style="color: #5f6368; margin-left: 12px; cursor: pointer;">mic</i>
+        </div>
+        <i class="material-icons profile-icon">account_circle</i>
+    </header>
+
+    <div class="nav-tabs">
+        <div class="tab active">For you</div>
+        <div class="tab">Top charts</div>
+        <div class="tab">Kids</div>
+        <div class="tab">Premium</div>
+        <div class="tab">Categories</div>
+        <div class="tab">Editors' Choice</div>
+    </div>
+
+    <div class="main-content">
+        <div class="section">
+            <!-- HTML5 Canvas Banner -->
+            <div class="featured-banner">
+                <canvas id="promoCanvas"></canvas>
+                <div class="banner-text">
+                    <h2>Creator Spotlight</h2>
+                    <p>Discover the latest independent masterpieces</p>
+                </div>
+            </div>
+
+            <div class="section-title">
+                Recommended for you
+                <i class="material-icons">arrow_forward</i>
+            </div>
+            
+            <div class="app-grid">
+                <!-- Custom App 1 -->
+                <div class="app-card">
+                    <div class="app-icon" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+                        <i class="material-icons" style="font-size: 56px;">smart_toy</i>
+                    </div>
+                    <div class="app-title">VinilsAi Assistant</div>
+                    <div class="app-rating">4.9 <i class="material-icons star">star</i></div>
+                    <div class="app-size">14 MB</div>
+                </div>
+
+                <!-- Custom App 2 -->
+                <div class="app-card">
+                    <div class="app-icon" style="background: linear-gradient(135deg, #00C9FF 0%, #92FE9D 100%);">
+                        <i class="material-icons" style="font-size: 56px;">forum</i>
+                    </div>
+                    <div class="app-title">BigBroz Messenger</div>
+                    <div class="app-rating">4.8 <i class="material-icons star">star</i></div>
+                    <div class="app-size">32 MB</div>
+                </div>
+
+                <!-- Custom App 3 -->
+                <div class="app-card">
+                    <div class="app-icon" style="background: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);">
+                        <i class="material-icons" style="font-size: 56px;">sports_esports</i>
+                    </div>
+                    <div class="app-title">3D Battle Royale (Offline)</div>
+                    <div class="app-rating">4.5 <i class="material-icons star">star</i></div>
+                    <div class="app-size">1.2 GB</div>
+                </div>
+
+                <!-- Custom App 4 -->
+                <div class="app-card">
+                    <div class="app-icon" style="background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%);">
+                        <i class="material-icons" style="font-size: 56px;">wallpaper</i>
+                    </div>
+                    <div class="app-title">4K Anime Wallpapers</div>
+                    <div class="app-rating">4.7 <i class="material-icons star">star</i></div>
+                    <div class="app-size">24 MB</div>
+                </div>
+                
+                <!-- Custom App 5 -->
+                <div class="app-card">
+                    <div class="app-icon" style="background: linear-gradient(135deg, #f12711 0%, #f5af19 100%);">
+                        <i class="material-icons" style="font-size: 56px;">storage</i>
+                    </div>
+                    <div class="app-title">Supabase DB Manager</div>
+                    <div class="app-rating">4.6 <i class="material-icons star">star</i></div>
+                    <div class="app-size">18 MB</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">
+                New & Updated Apps
+                <i class="material-icons">arrow_forward</i>
+            </div>
+            <div class="app-grid">
+                <!-- Generic Apps -->
+                <div class="app-card">
+                    <div class="app-icon" style="background: #25D366;">
+                        <i class="material-icons" style="font-size: 56px;">call</i>
+                    </div>
+                    <div class="app-title">GreenChat</div>
+                    <div class="app-rating">4.3 <i class="material-icons star">star</i></div>
+                    <div class="app-size">45 MB</div>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon" style="background: #1DB954;">
+                        <i class="material-icons" style="font-size: 56px;">music_note</i>
+                    </div>
+                    <div class="app-title">Streamify Music</div>
+                    <div class="app-rating">4.4 <i class="material-icons star">star</i></div>
+                    <div class="app-size">30 MB</div>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);">
+                        <i class="material-icons" style="font-size: 56px;">photo_camera</i>
+                    </div>
+                    <div class="app-title">PhotoGram</div>
+                    <div class="app-rating">4.1 <i class="material-icons star">star</i></div>
+                    <div class="app-size">52 MB</div>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon" style="background: #FF0000;">
+                        <i class="material-icons" style="font-size: 56px;">play_arrow</i>
+                    </div>
+                    <div class="app-title">VidTube</div>
+                    <div class="app-rating">4.6 <i class="material-icons star">star</i></div>
+                    <div class="app-size">78 MB</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelector('.tab.active').classList.remove('active');
+                tab.classList.add('active');
+            });
+        });
+
+        // HTML5 Canvas Animation for the Banner
+        const canvas = document.getElementById('promoCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Resize canvas
+        function resize() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Particle system for the canvas design
+        const particles = [];
+        for (let i = 0; i < 50; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 3 + 1,
+                dx: (Math.random() - 0.5) * 1,
+                dy: (Math.random() - 0.5) * 1,
+                color: `hsla(${Math.random() * 60 + 120}, 70%, 50%, 0.6)` // Greens and teals
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Background gradient
+            let gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#001a11');
+            gradient.addColorStop(1, '#004d33');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw particles
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+
+                // Move particles
+                p.x += p.dx;
+                p.y += p.dy;
+
+                // Bounce off edges
+                if (p.x + p.radius > canvas.width || p.x - p.radius < 0) p.dx = -p.dx;
+                if (p.y + p.radius > canvas.height || p.y - p.radius < 0) p.dy = -p.dy;
+            });
+        }
+        
+        animate();
+    </script>
+</body>
+</html>
